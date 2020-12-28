@@ -1,3 +1,4 @@
+// 手撕promise
 const PENDING_STATE = 'pending'
 const FULFILLED_STATE = 'fulfilled'
 const REJECTED_STATE = 'reject'
@@ -29,10 +30,10 @@ function Promise1(fun) {
         if (x === promise) {
             return reject(new TypeError('Promise can not resolved with it seft'))
         }
-        if (x instanceof Promise) {
+        if (x instanceof Promise1) {
             return x.then(resolve, reject)
         }
-        if (isObject(x) || isFunction(x)) {
+        if (x instanceof Promise1 && (isObject(x) || isFunction(x))) {
             let called = false
             try {
                 let then = x.then
@@ -72,7 +73,7 @@ function Promise1(fun) {
         this.value = reason
         this.onRejectedCallBacks.forEach(cb => cb())
     }
-
+    
     try{
         fun(resolve, reject)
     } catch(err) {
@@ -114,8 +115,10 @@ Promise1.prototype.then = function(onFulfilled, onRejected) {
     })
 }
 const p = new Promise1((rs, rj) => {
-    rj('1')
-    rs('2')
+    const obj = {
+        test: 'demo'
+    }
+    rs(obj)
 }).then(res => {
     console.log(res)
 })
